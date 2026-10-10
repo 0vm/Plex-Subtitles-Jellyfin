@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Plex Subtitles Jellyfin</title>
+</head>
+<body>
+    <div id="SubtitleCustomiserConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <form id="SubtitleCustomiserConfigForm">
+                    <div class="verticalSection">
+                        <h2 class="sectionTitle">Plex Subtitles Jellyfin</h2>
+                        <p>Clicking the subtitles (CC) button in the web player opens a Plex style panel for the subtitle track, colour, position, size, style and offset. Each user's choices are saved in their browser. The values below are what users start with until they change them.</p>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="scEnabled" name="Enabled" type="checkbox" is="emby-checkbox" />
+                            <span>Enable the subtitle panel</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">When off, the web player keeps Jellyfin's standard subtitle menu and rendering. Browsers pick up the change on their next page load.</div>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="scDefaultColour">Default colour</label>
+                        <select is="emby-select" id="scDefaultColour" name="DefaultColour" class="emby-select-withcolor emby-select">
+                            <option value="white">White</option>
+                            <option value="yellow">Yellow</option>
+                            <option value="green">Green</option>
+                            <option value="cyan">Cyan</option>
+                            <option value="blue">Blue</option>
+                            <option value="magenta">Magenta</option>
+                            <option value="red">Red</option>
+                            <option value="grey">Grey</option>
+                            <option value="black">Black</option>
+                        </select>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="scDefaultPosition">Default position</label>
+                        <select is="emby-select" id="scDefaultPosition" name="DefaultPosition" class="emby-select-withcolor emby-select">
+                            <option value="bottom">Bottom</option>
+                            <option value="raised">Raised</option>
+                            <option value="middle">Middle</option>
+                            <option value="top">Top</option>
+                        </select>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="scDefaultSize">Default size</label>
+                        <select is="emby-select" id="scDefaultSize" name="DefaultSize" class="emby-select-withcolor emby-select">
+                            <option value="tiny">Tiny</option>
+                            <option value="small">Small</option>
+                            <option value="normal">Normal</option>
+                            <option value="large">Large</option>
+                            <option value="huge">Huge</option>
+                        </select>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="scDefaultStyle">Default style</label>
+                        <select is="emby-select" id="scDefaultStyle" name="DefaultStyle" class="emby-select-withcolor emby-select">
+                            <option value="shadow">Drop Shadow</option>
+                            <option value="outline">Outline</option>
+                            <option value="box">Box</option>
+                            <option value="plain">Plain</option>
+                        </select>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="scLiftAboveControls" name="LiftAboveControls" type="checkbox" is="emby-checkbox" />
+                            <span>Move subtitles above the player controls</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">While the control bar is showing, bottom subtitles rise so the bar does not cover them.</div>
+                    </div>
+
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript">
+            (function () {
+                var pluginId = '3c1f6a5e-8d2b-4f7a-9b61-5c2e7d9a4f18';
+                var page = document.querySelector('#SubtitleCustomiserConfigPage');
+                var form = document.querySelector('#SubtitleCustomiserConfigForm');
+
+                page.addEventListener('pageshow', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        form.querySelector('#scEnabled').checked = config.Enabled !== false;
+                        form.querySelector('#scDefaultColour').value = config.DefaultColour || 'white';
+                        form.querySelector('#scDefaultPosition').value = config.DefaultPosition || 'bottom';
+                        form.querySelector('#scDefaultSize').value = config.DefaultSize || 'normal';
+                        form.querySelector('#scDefaultStyle').value = config.DefaultStyle || 'shadow';
+                        form.querySelector('#scLiftAboveControls').checked = config.LiftAboveControls !== false;
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        config.Enabled = form.querySelector('#scEnabled').checked;
+                        config.DefaultColour = form.querySelector('#scDefaultColour').value;
+                        config.DefaultPosition = form.querySelector('#scDefaultPosition').value;
+                        config.DefaultSize = form.querySelector('#scDefaultSize').value;
+                        config.DefaultStyle = form.querySelector('#scDefaultStyle').value;
+                        config.LiftAboveControls = form.querySelector('#scLiftAboveControls').checked;
+                        ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    });
+                    return false;
+                });
+            })();
+        </script>
+    </div>
+</body>
+</html>

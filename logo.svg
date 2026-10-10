@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1c1f"/>
+      <stop offset="1" stop-color="#0e0e10"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.62" r="0.55">
+      <stop offset="0" stop-color="#e5a00d" stop-opacity="0.22"/>
+      <stop offset="0.55" stop-color="#e5a00d" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#e5a00d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34343a"/>
+      <stop offset="1" stop-color="#1f1f23"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7c04a"/>
+      <stop offset="1" stop-color="#e5a00d"/>
+    </linearGradient>
+    <linearGradient id="jellyfin" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#aa5cc3"/>
+      <stop offset="1" stop-color="#00a4dc"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#glow)"/>
+
+  <!-- Player screen -->
+  <g filter="url(#shadow)">
+    <rect x="430" y="112" width="420" height="262" rx="28" fill="url(#screen)" stroke="#45454d" stroke-width="3"/>
+  </g>
+
+  <!-- Subtitle lines -->
+  <rect x="505" y="282" width="270" height="22" rx="11" fill="#f4f4f5"/>
+  <rect x="555" y="318" width="170" height="22" rx="11" fill="url(#gold)"/>
+
+  <!-- CC badge -->
+  <rect x="463" y="142" width="96" height="62" rx="14" fill="url(#gold)"/>
+  <text x="511" y="185" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="36" font-weight="800" fill="#1a1205" letter-spacing="1">CC</text>
+
+  <!-- Settings dots on the screen, like the panel rows -->
+  <g fill="#5d5d66">
+    <circle cx="790" cy="163" r="7"/>
+    <circle cx="790" cy="188" r="7"/>
+    <circle cx="815" cy="163" r="7" fill="url(#gold)"/>
+    <circle cx="815" cy="188" r="7"/>
+  </g>
+
+  <!-- Title -->
+  <text x="640" y="508" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="96" font-weight="700" fill="#ffffff" letter-spacing="-1">Plex Subtitles</text>
+  <text x="640" y="574" text-anchor="middle" font-family="Segoe UI, Inter, Arial, sans-serif" font-size="34" font-weight="700" fill="url(#jellyfin)" letter-spacing="14">FOR JELLYFIN</text>
+</svg>

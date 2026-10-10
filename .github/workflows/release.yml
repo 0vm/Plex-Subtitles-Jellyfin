@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name }}
+      NOTES: ${{ github.event.release.body }}
+    steps:
+      - name: Check out the released code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check the version and write the changelog
+        run: |
+          VERSION="${TAG#v}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::The release tag must be a four part version such as v1.0.1.0 (got $TAG)"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          printf '%s\n' "$NOTES" | tr -d '\r' | sed '/^[[:space:]]*$/d' > "$RUNNER_TEMP/changelog.md"
+          if [ ! -s "$RUNNER_TEMP/changelog.md" ]; then
+            echo "- Release $TAG" > "$RUNNER_TEMP/changelog.md"
+          fi
+          cat "$RUNNER_TEMP/changelog.md"
+
+      - name: Use the zip attached to the release, or build and attach one
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NAME="plex-subtitles-jellyfin_${VERSION}.zip"
+          mkdir -p dist
+          if gh release download "$TAG" --pattern "$NAME" --dir dist --repo "$GITHUB_REPOSITORY"; then
+            echo "Using the $NAME already attached to the release"
+          else
+            python package.py build "$VERSION"
+            gh release upload "$TAG" "dist/$NAME" --repo "$GITHUB_REPOSITORY"
+          fi
+
+      - name: Add the version to manifest.json on main
+        run: |
+          git fetch origin main
+          git checkout -B main origin/main
+          python package.py manifest "$VERSION" \
+            "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}" \
+            "$(cat "$RUNNER_TEMP/changelog.md")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manifest.json
+          git commit -m "Add ${TAG} to manifest" || echo "manifest.json unchanged"
+          git push origin main

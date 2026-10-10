@@ -1,0 +1,21 @@
+[
+  {
+    "guid": "3c1f6a5e-8d2b-4f7a-9b61-5c2e7d9a4f18",
+    "name": "Plex Subtitles Jellyfin",
+    "description": "🎬 Plex style subtitle settings for the Jellyfin web player. Click the CC button during playback and change everything live from a Plex-like panel. ★ Tracks: pick the subtitle track and an optional secondary track. ★ Look: colour (9 choices), size (Tiny to Huge), position (Bottom, Raised, Middle, Top) and style (Drop Shadow, Outline, Box, Plain). ★ Timing: subtitle offset in 100 ms and 1 s steps, positive means later, like Plex. ★ Controls aware: bottom subtitles rise above the control bar while it is showing. ★ Per user: each user's choices are saved in their browser, with server-wide defaults on the settings page. ★ Self-contained: no File Transformation or JavaScript Injector needed, and nothing on disk is changed, so it works with read-only web folders (Docker, TrueNAS). ⚠ Note: styles apply to text subtitles (SRT, VTT). ASS/SSA and image subtitles (PGS, VobSub) keep their own look, and burned-in subtitles cannot be restyled.",
+    "overview": "Plex style subtitle panel for the Jellyfin web player: track, colour, size, position, style and offset from the CC button",
+    "owner": "0vm",
+    "category": "General",
+    "imageUrl": "https://raw.githubusercontent.com/0vm/plex-subtitles-jellyfin/refs/heads/main/logo.png",
+    "versions": [
+      {
+        "version": "1.0.0.0",
+        "changelog": "- Initial release\n- Plex style subtitle panel on the player's CC button\n- Subtitle track and secondary track selection\n- Subtitle colour, size, position and style, applied live\n- Subtitle offset in 100 ms and 1 s steps (positive is later, like Plex)\n- Bottom subtitles rise above the control bar while it is showing\n- Server-wide defaults on the plugin settings page",
+        "targetAbi": "12.0.0.0",
+        "sourceUrl": "https://github.com/0vm/plex-subtitles-jellyfin/releases/download/v1.0.0.0/plex-subtitles-jellyfin_1.0.0.0.zip",
+        "checksum": "d89713b6a9c9e044dfe3ef5490183eaf",
+        "timestamp": "2026-10-10T08:01:34Z"
+      }
+    ]
+  }
+]
